@@ -5,6 +5,11 @@ export const checkIfUserExist = async (data: string) => {
 	return user !== null;
 };
 
+export const checkIfUserExistById = async (data: string) => {
+	const user = await repository.findUserById(data);
+	return user !== null;
+};
+
 export const getUser = async (data: string) => {
 	return await repository.findUser(data);
 };

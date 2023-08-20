@@ -2,7 +2,7 @@ import * as authService from '../services/auth.service';
 import * as userService from '../services/user.service';
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 
 export const register = async (req: Request, res: Response) => {
 	const { username, email, password } = req.body;
@@ -85,4 +85,51 @@ export const login = async (req: Request, res: Response) => {
 			refreshToken: refreshToken
 		}
 	});
+};
+
+export const refreshToken = async (req: Request, res: Response) => {
+	const authHeader = req.headers['authorization'];
+	console.log(authHeader);
+
+	const token = authHeader && authHeader.split(' ')[1];
+
+	if (!token) {
+		return res.status(401).send('No token provided');
+	}
+
+	jwt.verify(
+		token,
+		process.env.REFRESH_TOKEN as string,
+		async (error, user) => {
+			const { iat, exp, ...data } = user as jwt.JwtPayload;
+
+			if (error) {
+				return res.status(401).send('Unauthorized');
+			}
+
+			if (!user) {
+				return res.status(401).send('Unauthorized');
+			}
+
+			const userExist = await userService.checkIfUserExistById(data.userId);
+
+			if (!userExist) {
+				return res.status(404).send('User not found');
+			}
+
+			const newAccessToken = jwt.sign(
+				{ userId: data.userId }, // Access userId from the user object
+				process.env.ACCESS_TOKEN as string,
+				{
+					expiresIn: '3600s'
+				}
+			);
+
+			return res.status(200).send({
+				data: {
+					accessToken: newAccessToken
+				}
+			});
+		}
+	);
 };
