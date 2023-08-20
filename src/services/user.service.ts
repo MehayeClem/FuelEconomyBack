@@ -12,3 +12,7 @@ export const getUser = async (data: string) => {
 export const updateUser = async (id: string, data: string) => {
 	return await repository.updateUser(id, data);
 };
+
+export const deleteUser = async (id: string) => {
+	await repository.deleteUser(id);
+};

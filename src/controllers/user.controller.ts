@@ -27,8 +27,21 @@ export const updateUser = async (req: Request, res: Response) => {
 
 	try {
 		const updatedUser = await userService.updateUser(user.userId, data);
-		return res.status(200).send(updatedUser);
+		return res.status(200).send({
+			data: updatedUser
+		});
 	} catch (error) {
 		return res.status(500).send('Error while updating the user');
+	}
+};
+
+export const deleteUser = async (req: Request, res: Response) => {
+	const userId = req.body.user.userId;
+
+	try {
+		await userService.deleteUser(userId);
+		return res.status(200).send('User deleted');
+	} catch (error) {
+		return res.status(500).send('Error while deleting the user');
 	}
 };
