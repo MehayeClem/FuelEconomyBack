@@ -14,7 +14,7 @@ function authToken(req: Request, res: Response, next: NextFunction) {
 			return res.status(401).send('Unauthorized');
 		}
 
-		req.body.userId = userId;
+		req.body.user = userId;
 		next();
 	});
 }

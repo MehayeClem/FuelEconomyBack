@@ -6,6 +6,9 @@ export const checkIfUserExist = async (data: string) => {
 };
 
 export const getUser = async (data: string) => {
-	const user = await repository.findUser(data);
-	return user;
+	return await repository.findUser(data);
+};
+
+export const updateUser = async (id: string, data: string) => {
+	return await repository.updateUser(id, data);
 };
