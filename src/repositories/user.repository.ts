@@ -15,6 +15,14 @@ export const findUser = async (data: string) => {
 	});
 };
 
+export const findUserById = async (id: string) => {
+	return await prisma.user.findFirst({
+		where: {
+			id: id
+		}
+	});
+};
+
 export const updateUser = async (id: string, data: string) => {
 	return await prisma.user.update({
 		where: {

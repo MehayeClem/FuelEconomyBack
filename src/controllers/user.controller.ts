@@ -45,3 +45,16 @@ export const deleteUser = async (req: Request, res: Response) => {
 		return res.status(500).send('Error while deleting the user');
 	}
 };
+
+export const getUser = async (req: Request, res: Response) => {
+	const userId = req.body.user.userId;
+
+	try {
+		const user = await userService.getUserById(userId);
+		return res.status(200).send({
+			data: user
+		});
+	} catch (error) {
+		return res.status(500).send('Error while getting the user');
+	}
+};

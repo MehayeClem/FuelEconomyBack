@@ -9,6 +9,10 @@ export const getUser = async (data: string) => {
 	return await repository.findUser(data);
 };
 
+export const getUserById = async (id: string) => {
+	return await repository.findUserById(id);
+};
+
 export const updateUser = async (id: string, data: string) => {
 	return await repository.updateUser(id, data);
 };
