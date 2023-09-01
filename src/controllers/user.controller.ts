@@ -9,7 +9,7 @@ export const updateUser = async (req: Request, res: Response) => {
 		return res
 			.status(400)
 			.send(
-				'Missing required data. Please provide email, username or password'
+				'Données manquantes. Merci de fournir une adresse mail, un mot de passe et un pseudonyme'
 			);
 	}
 
@@ -17,7 +17,7 @@ export const updateUser = async (req: Request, res: Response) => {
 	const usernameExist = await userService.checkIfUserExist(data.username);
 
 	if (emailExist || usernameExist) {
-		return res.status(400).send('User already exist');
+		return res.status(400).send("L'utilisateur existe déjà");
 	}
 
 	if (data.password) {
@@ -31,7 +31,9 @@ export const updateUser = async (req: Request, res: Response) => {
 			data: updatedUser
 		});
 	} catch (error) {
-		return res.status(500).send('Error while updating the user');
+		return res
+			.status(500)
+			.send("Erreur pendant la modification de l'utilisateur");
 	}
 };
 
@@ -40,9 +42,11 @@ export const deleteUser = async (req: Request, res: Response) => {
 
 	try {
 		await userService.deleteUser(userId);
-		return res.status(200).send('User deleted');
+		return res.status(200).send('Utilisateur supprimé');
 	} catch (error) {
-		return res.status(500).send('Error while deleting the user');
+		return res
+			.status(500)
+			.send("Erreur pendant la suppression de l'utilisateur");
 	}
 };
 
@@ -55,6 +59,8 @@ export const getUser = async (req: Request, res: Response) => {
 			data: user
 		});
 	} catch (error) {
-		return res.status(500).send('Error while getting the user');
+		return res
+			.status(500)
+			.send("Erreur pendant la récupération des données de l'utilisateur");
 	}
 };

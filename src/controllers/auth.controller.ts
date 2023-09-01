@@ -2,7 +2,7 @@ import * as authService from '../services/auth.service';
 import * as userService from '../services/user.service';
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 export const register = async (req: Request, res: Response) => {
 	const { username, email, password } = req.body;
@@ -11,7 +11,7 @@ export const register = async (req: Request, res: Response) => {
 		return res
 			.status(400)
 			.send(
-				'Missing required data. Please provide email, username and password'
+				'Données manquantes. Merci de fournir une adresse mail, un mot de passe et un pseudonyme'
 			);
 	}
 
@@ -21,7 +21,7 @@ export const register = async (req: Request, res: Response) => {
 	const usernameExist = await userService.checkIfUserExist(username);
 
 	if (emailExist || usernameExist) {
-		return res.status(400).send('User already exist');
+		return res.status(400).send("L'utilisateur existe déjà");
 	}
 
 	const userData = {
@@ -36,31 +36,31 @@ export const register = async (req: Request, res: Response) => {
 			data: newUser
 		});
 	} catch (error) {
-		return res.status(500).send('Error while creating the user');
+		return res.status(500).send("Error pendant la création de l'utilisateur");
 	}
 };
 
 export const login = async (req: Request, res: Response) => {
-	const { data, password } = req.body;
+	const { email, password } = req.body;
 
-	if (!data || !password) {
+	if (!email || !password) {
 		return res
 			.status(400)
 			.send(
-				'Missing required data. Please provide password and email or username'
+				'Données manquantes. Merci de fournir une adresse mail et un mot de passe'
 			);
 	}
 
-	const user = await userService.getUser(data);
+	const user = await userService.getUser(email);
 
 	if (!user) {
-		return res.status(404).send('User not found');
+		return res.status(404).send("L'utilisateur est introuvable");
 	}
 
 	const isPasswordValid = await bcrypt.compare(password, user.password);
 
 	if (!isPasswordValid) {
-		return res.status(400).send('Invalid password');
+		return res.status(400).send('Mot de passe invalide');
 	}
 
 	const accessToken = jwt.sign(
@@ -94,7 +94,7 @@ export const refreshToken = async (req: Request, res: Response) => {
 	const token = authHeader && authHeader.split(' ')[1];
 
 	if (!token) {
-		return res.status(401).send('No token provided');
+		return res.status(401).send("Le token n'est pas fourni");
 	}
 
 	jwt.verify(
@@ -104,17 +104,17 @@ export const refreshToken = async (req: Request, res: Response) => {
 			const { iat, exp, ...data } = user as jwt.JwtPayload;
 
 			if (error) {
-				return res.status(401).send('Unauthorized');
+				return res.status(401).send('Pas autorisé');
 			}
 
 			if (!user) {
-				return res.status(401).send('Unauthorized');
+				return res.status(401).send('Pas autorisé');
 			}
 
 			const userExist = await userService.checkIfUserExistById(data.userId);
 
 			if (!userExist) {
-				return res.status(404).send('User not found');
+				return res.status(404).send("L'utilisateur est introuvable");
 			}
 
 			const newAccessToken = jwt.sign(
