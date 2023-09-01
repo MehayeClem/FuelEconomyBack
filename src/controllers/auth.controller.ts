@@ -80,10 +80,8 @@ export const login = async (req: Request, res: Response) => {
 	);
 
 	return res.status(200).send({
-		data: {
-			accessToken: accessToken,
-			refreshToken: refreshToken
-		}
+		accessToken: accessToken,
+		refreshToken: refreshToken
 	});
 };
 
