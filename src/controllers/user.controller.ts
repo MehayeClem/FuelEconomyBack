@@ -28,7 +28,7 @@ export const updateUser = async (req: Request, res: Response) => {
 	try {
 		const updatedUser = await userService.updateUser(user.userId, data);
 		return res.status(200).send({
-			data: updatedUser
+			updatedUser
 		});
 	} catch (error) {
 		return res
@@ -56,7 +56,7 @@ export const getUser = async (req: Request, res: Response) => {
 	try {
 		const user = await userService.getUserById(userId);
 		return res.status(200).send({
-			data: user
+			user
 		});
 	} catch (error) {
 		return res
