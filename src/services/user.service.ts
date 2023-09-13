@@ -22,6 +22,6 @@ export const updateUser = async (id: string, data: string) => {
 	return await repository.updateUser(id, data);
 };
 
-export const deleteUser = async (id: string) => {
-	await repository.deleteUser(id);
+export const deleteUser = async (username: string) => {
+	await repository.deleteUser(username);
 };

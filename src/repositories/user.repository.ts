@@ -32,10 +32,10 @@ export const updateUser = async (id: string, data: string) => {
 	});
 };
 
-export const deleteUser = async (id: string) => {
+export const deleteUser = async (username: string) => {
 	await prisma.user.delete({
 		where: {
-			id: id
+			username: username
 		}
 	});
 };

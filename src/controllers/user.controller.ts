@@ -38,10 +38,16 @@ export const updateUser = async (req: Request, res: Response) => {
 };
 
 export const deleteUser = async (req: Request, res: Response) => {
-	const userId = req.body.user.userId;
+	const userUsername = req.params.username;
+
+	if (!userUsername) {
+		return res
+			.status(400)
+			.send('Données manquantes. Merci de fournir un pseudonyme');
+	}
 
 	try {
-		await userService.deleteUser(userId);
+		await userService.deleteUser(userUsername);
 		return res.status(200).send('Utilisateur supprimé');
 	} catch (error) {
 		return res
