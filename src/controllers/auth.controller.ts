@@ -36,7 +36,9 @@ export const register = async (req: Request, res: Response) => {
 			data: newUser
 		});
 	} catch (error) {
-		return res.status(500).send("Error pendant la création de l'utilisateur");
+		return res
+			.status(500)
+			.send("Erreur pendant la création de l'utilisateur");
 	}
 };
 
@@ -116,7 +118,7 @@ export const refreshToken = async (req: Request, res: Response) => {
 			}
 
 			const newAccessToken = jwt.sign(
-				{ userId: data.userId }, // Access userId from the user object
+				{ userId: data.userId },
 				process.env.ACCESS_TOKEN as string,
 				{
 					expiresIn: '3600s'

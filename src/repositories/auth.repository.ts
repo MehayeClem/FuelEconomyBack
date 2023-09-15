@@ -8,6 +8,10 @@ export const register = async (userData: {
 	password: string;
 }) => {
 	return await prisma.user.create({
-		data: userData
+		data: {
+			username: userData.username,
+			email: userData.email,
+			password: userData.password
+		}
 	});
 };
