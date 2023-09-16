@@ -100,24 +100,23 @@ export const refreshToken = async (req: Request, res: Response) => {
 		token,
 		process.env.REFRESH_TOKEN as string,
 		async (error, user) => {
-			const { iat, exp, ...data } = user as jwt.JwtPayload;
-
-			if (error) {
+			if (
+				error ||
+				!user ||
+				typeof user !== 'object' ||
+				!('userId' in user)
+			) {
 				return res.status(401).send('Pas autorisé');
 			}
 
-			if (!user) {
-				return res.status(401).send('Pas autorisé');
-			}
-
-			const userExist = await userService.checkIfUserExistById(data.userId);
+			const userExist = await userService.checkIfUserExistById(user.userId);
 
 			if (!userExist) {
 				return res.status(404).send("L'utilisateur est introuvable");
 			}
 
 			const newAccessToken = jwt.sign(
-				{ userId: data.userId },
+				{ userId: user.userId },
 				process.env.ACCESS_TOKEN as string,
 				{
 					expiresIn: '3600s'
