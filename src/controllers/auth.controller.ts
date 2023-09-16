@@ -126,9 +126,7 @@ export const refreshToken = async (req: Request, res: Response) => {
 			);
 
 			return res.status(200).send({
-				data: {
-					accessToken: newAccessToken
-				}
+				accessToken: newAccessToken
 			});
 		}
 	);
