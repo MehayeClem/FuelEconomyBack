@@ -89,7 +89,6 @@ export const login = async (req: Request, res: Response) => {
 
 export const refreshToken = async (req: Request, res: Response) => {
 	const authHeader = req.headers['authorization'];
-	console.log(authHeader);
 
 	const token = authHeader && authHeader.split(' ')[1];
 
