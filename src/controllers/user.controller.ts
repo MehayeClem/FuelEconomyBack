@@ -25,26 +25,26 @@ export const updateUser = async (req: Request, res: Response) => {
 		return res
 			.status(400)
 			.send(
-				'Données manquantes. Merci de fournir une adresse mail, un mot de passe et un pseudonyme'
+				'Données manquantes. Merci de fournir une adresse mail ou un pseudonyme'
 			);
 	}
 
 	const emailExist = await userService.checkIfUserExist(data.email);
 	const usernameExist = await userService.checkIfUserExist(data.username);
 
-	if (emailExist || usernameExist) {
-		return res.status(400).send("L'utilisateur existe déjà");
+	if (usernameExist) {
+		return res.status(400).send('Le pseudonyme existe déjà');
 	}
 
-	if (data.password) {
-		const hashedPassword = await bcrypt.hash(data.password, 10);
-		data.password = hashedPassword;
+	if (emailExist) {
+		return res.status(400).send("L'adresse mail existe déjà");
 	}
 
 	try {
 		const updatedUser = await userService.updateUser(userId, data);
 		return res.status(200).send({
-			updatedUser
+			user: updatedUser,
+			message: 'Vos données ont bien été modifiée'
 		});
 	} catch (error) {
 		return res
@@ -132,7 +132,10 @@ export const deleteGasStation = async (req: Request, res: Response) => {
 
 	try {
 		await userService.addGasStation(userId, updatedGasStations);
-		return res.status(201).send('Station service supprimée');
+		return res.status(201).send({
+			gasStations: updatedGasStations,
+			message: 'Station service supprimée'
+		});
 	} catch (error) {
 		return res
 			.status(500)
