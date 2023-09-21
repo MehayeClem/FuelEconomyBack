@@ -4,7 +4,7 @@ import cors from 'cors';
 import { rateLimit } from 'express-rate-limit';
 
 const rateLimiter = rateLimit({
-	max: 20,
+	max: 100,
 	windowMs: 1000 * 60,
 	message: 'Too many request from this IP'
 });
