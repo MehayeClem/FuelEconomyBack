@@ -13,7 +13,7 @@ const app = express();
 
 app.use(
 	cors({
-		origin: 'https://fuel-economy-front.vercel.app'
+		origin: '*'
 	})
 );
 app.use(rateLimiter);
