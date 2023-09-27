@@ -11,7 +11,11 @@ const rateLimiter = rateLimit({
 
 const app = express();
 
-app.use(cors());
+app.use(
+	cors({
+		origin: 'https://fuel-economy-front.vercel.app'
+	})
+);
 app.use(rateLimiter);
 app.use(express.json());
 app.use('/api/v1', routes);
